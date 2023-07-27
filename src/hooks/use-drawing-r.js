@@ -4,7 +4,7 @@ const useDrawing = () => {
   const canvasRef = useRef(null);
   const contextRef = useRef(null);
 
-  const [brushSize, setBrushSize] = useState(25);
+  const [brushSize, setBrushSize] = useState(15);
   const [isDrawing, setIsDrawing] = useState(false);
 
   const currDrawingOps = useRef([]);
