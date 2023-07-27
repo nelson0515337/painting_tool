@@ -1,8 +1,7 @@
-import { React, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import styles from "./BrushSizeSelector.module.css";
 
 const BrushSizeSelector = (props) => {
-  const [activeIdx, setActiveIdx] = useState(4);
   const [sizeChanged, setSizeChanged] = useState(null);
 
   useEffect(() => {
@@ -16,28 +15,29 @@ const BrushSizeSelector = (props) => {
     };
   }, [props.brushSize]);
 
-  const buttonClickHandler = (newBrushSize, id) => {
+  const handleBrushSizeChange = (newBrushSize) => {
     props.setBrushSize(newBrushSize);
-    setActiveIdx(id);
   };
 
   return (
-    <div className={styles["width-select"]}>
-      {[45, 40, 35, 30, 25, 15, 1].map((size, idx) => {
-        return (
-          <button
-            key={size}
-            style={{
-              height: size,
-              width: size,
-              backgroundColor: idx === activeIdx ? "#D6FF6E" : "transparent",
-            }}
-            onClick={() => {
-              buttonClickHandler(size, idx);
-            }}
-          />
-        );
-      })}
+    <div className={styles["brush-selector"]}>
+      <div className={styles["draw-bar"]}>
+        <input
+          type="range"
+          min="1"
+          max="45"
+          step="1"
+          value={props.brushSize}
+          onChange={(e) => handleBrushSizeChange(e.target.value)}
+          className={styles["brush-slider"]}
+        />
+      </div>
+      <div className={styles["brush-indicator-container"]}>
+        <div
+          className={styles["brush-indicator"]}
+          style={{ width: `${props.brushSize}px`, height: `${props.brushSize}px` }}
+        />
+      </div>
       <span className={sizeChanged ? styles["font-large"] : ""}>
         {props.brushSize}
       </span>

@@ -24,7 +24,7 @@ const useDrawing = () => {
   const startDrawing = ({ nativeEvent }) => {
     contextRef.current.lineCap = "round"; // butt(def), round, square
     contextRef.current.lineJoin = "round"; // miter(def), round, bevel
-    contextRef.current.strokeStyle = "rgb(214, 255, 110, 0.01)";
+    contextRef.current.strokeStyle = "rgb(214, 255, 110, 0.1)";
     contextRef.current.lineWidth = brushSize;
 
     const { offsetX, offsetY } = nativeEvent;
