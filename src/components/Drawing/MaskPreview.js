@@ -1,4 +1,3 @@
-// MaskPreview.js
 import React, { useRef, useEffect } from "react";
 
 const MaskPreview = ({ maskDataURL, width, height, onClose }) => {
@@ -39,19 +38,39 @@ const MaskPreview = ({ maskDataURL, width, height, onClose }) => {
         height: "100vh",
         backgroundColor: "black",
         display: "flex",
+        flexDirection: "column", // Change the flexDirection to column
         justifyContent: "center",
         alignItems: "center",
         zIndex: 9999,
       }}
       onClick={onClose}>
-      <canvas
-        ref={canvasRef}
-        width={width} // Adjust the width as needed
-        height={height} // Adjust the height as needed
+      {/* Text to instruct the user */}
+      <div
         style={{
-          border: "1px solid white", // White stroke
-        }}
-      />
+          color: "white",
+          fontSize: "18px",
+          fontWeight: "bold",
+          marginBottom: "20px", // Add some bottom margin to separate from the canvas
+        }}>
+        Click anywhere to leave the mask preview
+      </div>
+      {/* Preview mask box */}
+      <div
+        style={{
+          width: width,
+          height: height,
+          border: "1px solid white",
+        }}>
+        <canvas
+          ref={canvasRef}
+          width={width}
+          height={height}
+          style={{
+            border: "1px solid white",
+            boxSizing: "border-box",
+          }}
+        />
+      </div>
     </div>
   );
 };
