@@ -31,6 +31,7 @@ const ImageControl = (props) => {
 
       <button
         className={styles["button-inpaint"]}
+        style={{ "--button-hover-bg-color": props.colorStyle }}
         // onClick={props.onInpaintClick}
       >
         <ImLab />
