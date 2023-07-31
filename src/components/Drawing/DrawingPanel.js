@@ -19,11 +19,14 @@ const DrawingPanel = (props) => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [selectedImgUrl, setSelectedImgUrl] = useState(null);
   const [serverSize, setServerSize] = useState(512);
+  const [previewMask, setPreviewMask] = useState(false);
 
   const [
     canvasRef,
     brushSize,
     setBrushSize,
+    colorStyle,
+    setColorStyle,
     startDrawing,
     finishDrawing,
     draw,
@@ -77,7 +80,6 @@ const DrawingPanel = (props) => {
     }
   };
 
-
   return (
     <div className={styles["control-panel"]}>
       <div className={styles["wrapper"]}>
@@ -95,11 +97,13 @@ const DrawingPanel = (props) => {
             draw={draw}
             // lineWidthChange={lineWidthChange}
             setBrushSize={setBrushSize}
+            previewMask={previewMask}
           />
 
           <BrushSizeSelector
             brushSize={brushSize}
             setBrushSize={setBrushSize}
+            colorStyle={colorStyle}
           />
         </div>
         <div className={styles.test}>
@@ -108,6 +112,10 @@ const DrawingPanel = (props) => {
             onSizeChange={setServerSize}
             canvasRef={canvasRef}
             selectedImgUrl={selectedImgUrl}
+            previewMask={previewMask}
+            setPreviewMask={setPreviewMask}
+            colorStyle={colorStyle}
+            setColorStyle={setColorStyle}
           />
         </div>
       </div>

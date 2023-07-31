@@ -35,7 +35,11 @@ const BrushSizeSelector = (props) => {
       <div className={styles["brush-indicator-container"]}>
         <div
           className={styles["brush-indicator"]}
-          style={{ width: `${props.brushSize}px`, height: `${props.brushSize}px` }}
+          style={{
+            width: `${props.brushSize}px`,
+            height: `${props.brushSize}px`,
+            backgroundColor: props.colorStyle,
+          }}
         />
       </div>
       <span className={sizeChanged ? styles["font-large"] : ""}>

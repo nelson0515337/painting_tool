@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styles from "./DrawingField.module.css";
 import Dropzone from "../UI/Dropzone";
 
@@ -32,6 +32,7 @@ const DrawingField = (props) => {
           style={{
             height: props.imageSize.height,
             width: props.imageSize.width,
+            filter: props.previewMask ? "grayscale(100%)" : "none",
           }}
         />
       )}

@@ -1,33 +1,45 @@
 import React, { useState } from "react";
 import classes from "./Sidebar.module.css";
-import MaskPreview from "./MaskPreview";
+import { ImFolderDownload } from "react-icons/im";
+
+const RoundButton = ({ color, onClick }) => {
+  return (
+    <button
+      onClick={onClick}
+      style={{
+        backgroundColor: color,
+        width: "20px",
+        height: "20px",
+        borderRadius: "50%",
+        margin: "5px",
+      }}
+    />
+  );
+};
 
 const Sidebar = (props) => {
-  const [maskPreviewVisible, setMaskPreviewVisible] = useState(false);
-
   const toggleMaskPreview = () => {
-    setMaskPreviewVisible((prevState) => !prevState);
+    props.setPreviewMask((prevState) => !prevState);
   };
 
-  const saveMaskHandler = () => {
+  const savePanelHandler = () => {
     const originalCanvas = props.canvasRef.current;
-    const originalCtx = originalCanvas.getContext("2d");
 
     // Create a new temporary canvas
-    const tempCanvas = document.createElement("canvas");
-    tempCanvas.width = originalCanvas.width;
-    tempCanvas.height = originalCanvas.height;
-    const tempCtx = tempCanvas.getContext("2d");
+    const whiteMaskCanvas = document.createElement("canvas");
+    whiteMaskCanvas.width = originalCanvas.width;
+    whiteMaskCanvas.height = originalCanvas.height;
+    const whiteMaskCtx = whiteMaskCanvas.getContext("2d");
 
     // Draw the original canvas on the temporary canvas
-    tempCtx.drawImage(originalCanvas, 0, 0);
+    whiteMaskCtx.drawImage(originalCanvas, 0, 0);
 
     // Get the image data of the temporary canvas
-    const imageData = tempCtx.getImageData(
+    const imageData = whiteMaskCtx.getImageData(
       0,
       0,
-      tempCanvas.width,
-      tempCanvas.height
+      whiteMaskCanvas.width,
+      whiteMaskCanvas.height
     );
     const data = imageData.data;
 
@@ -42,19 +54,63 @@ const Sidebar = (props) => {
         data[i + 1] = 255; // Set green to 255 (white)
         data[i + 2] = 255; // Set blue to 255 (white)
         data[i + 3] = 255; // Set alpha to 255 (no transparency)
+      } else {
+        data[i + 3] = 0;
       }
     }
 
     // Put the transformed image data back to the temporary canvas
-    tempCtx.putImageData(imageData, 0, 0);
+    whiteMaskCtx.putImageData(imageData, 0, 0);
 
+    saveImageHandler(whiteMaskCanvas);
+    saveMaskHandler(whiteMaskCanvas);
+  };
+
+  const saveMaskHandler = (whiteMaskCanvas) => {
     // Download the transformed mask
     const link = document.createElement("a");
     link.download = "mask.png";
-    link.href = tempCanvas.toDataURL();
+    link.href = whiteMaskCanvas.toDataURL();
     link.click();
     link.remove();
   };
+
+  const saveImageHandler = (whiteMaskCanvas) => {
+    const originalImg = new Image();
+    originalImg.src = props.selectedImgUrl;
+    originalImg.onload = () => {
+      const hybridCanvas = document.createElement("canvas");
+      hybridCanvas.width = whiteMaskCanvas.width;
+      hybridCanvas.height = whiteMaskCanvas.height;
+      const hybridCtx = hybridCanvas.getContext("2d");
+
+      // Draw the original image on the hybrid canvas
+      hybridCtx.drawImage(
+        originalImg,
+        0,
+        0,
+        hybridCanvas.width,
+        hybridCanvas.height
+      );
+
+      // Apply the white mask on top of the hybrid canvas
+      // hybridCtx.globalCompositeOperation = "destination-in";
+      hybridCtx.drawImage(whiteMaskCanvas, 0, 0);
+
+      // Download the hybrid image
+      const link = document.createElement("a");
+      link.download = "masked_image.png";
+      link.href = hybridCanvas.toDataURL();
+      link.click();
+      link.remove();
+    };
+  };
+
+  const handleColorChange = (color) => {
+    console.log(`the colorStyle is ${props.colorStyle}`);
+    props.setColorStyle(color);
+  };
+
   return (
     <div className={classes.sidebar}>
       <label>Size:</label>
@@ -66,16 +122,32 @@ const Sidebar = (props) => {
         defaultValue={props.serverSize}
       />
       <div className={classes["button-container"]}>
-        <button onClick={toggleMaskPreview}>preview</button>
-        <button onClick={saveMaskHandler}>save mask</button>
-        {maskPreviewVisible && (
-          <MaskPreview
-            maskDataURL={props.canvasRef.current.toDataURL()}
-            width={props.canvasRef.current.width}
-            height={props.canvasRef.current.height}
-            onClose={toggleMaskPreview}
+        <button onClick={toggleMaskPreview}>
+          {props.previewMask ? "original" : "graysacle"}
+        </button>
+        <button onClick={savePanelHandler}>
+          <ImFolderDownload />
+        </button>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "center",
+          }}
+        >
+          <RoundButton
+            color="rgb(230, 141, 150)"
+            onClick={() => handleColorChange("rgb(230, 141, 150)")}
           />
-        )}
+          <RoundButton
+            color="rgb(214, 255, 110)"
+            onClick={() => handleColorChange("rgb(214, 255, 110)")}
+          />
+          <RoundButton
+            color="rgb(141, 231, 223)"
+            onClick={() => handleColorChange("rgb(141, 231, 223)")}
+          />
+        </div>
       </div>
     </div>
   );

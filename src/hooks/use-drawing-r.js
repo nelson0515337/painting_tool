@@ -5,6 +5,7 @@ const useDrawing = () => {
   const contextRef = useRef(null);
 
   const [brushSize, setBrushSize] = useState(15);
+  const [colorStyle, setColorStyle] = useState("rgb(214, 255, 110)");
   const [isDrawing, setIsDrawing] = useState(false);
 
   const currDrawingOps = useRef([]);
@@ -21,10 +22,16 @@ const useDrawing = () => {
     });
   }, [canvasRef, contextRef]);
 
+  useEffect(() => {
+    console.log(`re-draw the mask with ${opsBuffer.length} strokes`);
+    clearCanvas(false);
+    drawOps(opsBuffer);
+  }, [colorStyle]);
+
   const startDrawing = ({ nativeEvent }) => {
     contextRef.current.lineCap = "round"; // butt(def), round, square
     contextRef.current.lineJoin = "round"; // miter(def), round, bevel
-    contextRef.current.strokeStyle = "rgb(214, 255, 110, 0.1)";
+    contextRef.current.strokeStyle = colorStyle;
     contextRef.current.lineWidth = brushSize;
 
     const { offsetX, offsetY } = nativeEvent;
@@ -84,6 +91,7 @@ const useDrawing = () => {
         contextRef.current.moveTo(...op.point);
       } else if (op.type === "curve") {
         contextRef.current.lineWidth = op.brushSize;
+        contextRef.current.strokeStyle = colorStyle;
         op.points.forEach((point) => {
           contextRef.current.lineTo(...point);
           contextRef.current.stroke();
@@ -134,6 +142,8 @@ const useDrawing = () => {
     canvasRef,
     brushSize,
     setBrushSize,
+    colorStyle,
+    setColorStyle,
     startDrawing,
     finishDrawing,
     draw,
