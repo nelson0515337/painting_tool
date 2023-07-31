@@ -121,7 +121,9 @@ const Sidebar = (props) => {
         }}
         defaultValue={props.serverSize}
       />
-      <div className={classes["button-container"]}>
+      <div
+        className={classes["button-container"]}
+        style={{ "--button-hover-bg-color": props.colorStyle }}>
         <button onClick={toggleMaskPreview}>
           {props.previewMask ? "original" : "graysacle"}
         </button>
@@ -133,8 +135,7 @@ const Sidebar = (props) => {
             display: "flex",
             flexDirection: "row",
             justifyContent: "center",
-          }}
-        >
+          }}>
           <RoundButton
             color="rgb(230, 141, 150)"
             onClick={() => handleColorChange("rgb(230, 141, 150)")}

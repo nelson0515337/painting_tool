@@ -126,6 +126,7 @@ const DrawingPanel = (props) => {
         onClearClick={clearCanvas}
         onUndoClick={undoStepHandler}
         onRedoClick={redoStepHandler}
+        colorStyle={colorStyle}
       />
     </div>
   );

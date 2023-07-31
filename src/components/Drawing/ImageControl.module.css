@@ -16,11 +16,13 @@
   border-radius: 8px;
 }
 
+
 .image-control button:hover,
 .image-control button:active {
   color: rgb(0, 0, 0, 1);
   border: 2px solid rgb(0, 0, 0, 1);
-  background-color: #b7ff00;
+  background-color: var(--button-hover-bg-color);
+  /* background-color: #b7ff00; */
 }   
 
 .image-control .button-inpaint {

@@ -5,13 +5,14 @@ import { ImCloudUpload, ImBin, ImLab } from "react-icons/im";
 
 const ImageControl = (props) => {
   return (
-    <div className={styles["image-control"]}>
+    <div
+      className={styles["image-control"]}
+      style={{ "--button-hover-bg-color": props.colorStyle }}>
       <button className="button-upload">
         <label
           htmlFor={styles["image-upload"]}
-          className={styles["image-upload-label"]}
-        >
-          <ImCloudUpload/>
+          className={styles["image-upload-label"]}>
+          <ImCloudUpload />
         </label>
         <input
           id={styles["image-upload"]}
@@ -20,7 +21,7 @@ const ImageControl = (props) => {
         />
       </button>
       <button className="button-clear" onClick={props.onClearClick}>
-        <ImBin/>
+        <ImBin />
       </button>
 
       <DoubleButton
@@ -32,7 +33,7 @@ const ImageControl = (props) => {
         className={styles["button-inpaint"]}
         // onClick={props.onInpaintClick}
       >
-        <ImLab/>
+        <ImLab />
       </button>
     </div>
   );
